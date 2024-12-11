@@ -1,7 +1,7 @@
 const fecha = document.querySelector('#fecha');
 const lista = document.querySelector('#lista');
 const elemento = document.querySelector('#elemento');
-const input = document.querySelector('#');
+const input = document.querySelector('#input');
 const botonAgregar = document.querySelector('#botonAgregar');
 const check = 'bi-record-circle';
 const tachado = 'tachado';
@@ -10,7 +10,7 @@ let LIST;
 let id;
 
 const FECHA = new Date();
-fecha.innerHTML = fecha.toLocaleDateString('es-MX', {
+fecha.innerHTML = FECHA.toLocaleDateString('es-MX', {
     weekday: 'long',
     month: 'short',
     day: 'numeric'
@@ -24,24 +24,23 @@ function agregarTarea(tarea, id, hecho, eliminar){
     const realizado = hecho ? check : uncheck;
     const LINE = hecho ? tachado : '';
     const elemento = `<li id="elemento">
-        <i id="${id}" data="hecho" class="bi ${realizado}"></i>
-        <p class="tarea-lista text ${LINE}">${tarea}</p>
+        <i id="${id}" data="hecho" class="bi ${realizado}"></i>&nbsp;
+        <p class="tarea-lista text ${LINE}">${tarea}</p>&nbsp;
         <i id="${id}" data="eliminar" class="bi bi-x"></i>
     </li>`
     lista.insertAdjacentHTML("beforeend", elemento)
 };
 
-function tareaRealizada(element){
-    element.classlist.toggle(check);
-    element.classlist.toggle(uncheck);
-    element.parentNode.querySelector('.text').classlist.toggle(tachado);
-    LIST[element.i].realizado = LIST[element.id].realizado ? false : true;
-
-};
+function tareaRealizada(element) {
+    element.classList.toggle(check);
+    element.classList.toggle(uncheck);
+    element.parentNode.querySelector('.text').classList.toggle(tachado);
+    LIST[element.id].hecho = !LIST[element.id].hecho; 
+}
 
 function tareaEliminada(element){
     element.parentNode.parentNode.removeChild(element.parentNode);
-    LIST[element.i].eliminar = true;
+    LIST[element.id].eliminar = true;
 }
 
 botonAgregar.addEventListener("click", () =>{
@@ -60,9 +59,9 @@ botonAgregar.addEventListener("click", () =>{
     }
 });
 
-lista.addEventListener.getItem("click", function(event){
+lista.addEventListener("click", function(event){
     const element = event.target;
-    const elementData = element.attributes.data.value;
+    const elementData = element.getAttribute("data");
     if(elementData == "hecho"){
         tareaRealizada(element);
     } else if (elementData == "eliminar"){
